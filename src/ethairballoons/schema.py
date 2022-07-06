@@ -1,6 +1,7 @@
 from pybars import Compiler
 from solcx import install_solc
 from solcx import compile_source
+import json
 import os
 
 class Schema:
@@ -36,7 +37,7 @@ class Schema:
         self.account = accountToSet
 
     def preprocessId(self, Id):
-        return self.web3.utils.asciiToHex(Id) if 'bytes' in self.idType else Id
+        return self.web3.toHex(text=Id) if 'bytes' in self.idType else Id
 
     def validate(self):
         idFound = 0
@@ -52,8 +53,8 @@ class Schema:
         if not isinstance(self.modelDefinition['properties'], list):
             raise TypeError('properties must be an array')
 
-        self.propertyNames = map(
-            lambda p: p.name, self.modelDefinition['properties'])
+        self.propertyNames = list(map(
+            lambda p: p['name'], self.modelDefinition['properties']))
 
         for i in range(0, len(self.modelDefinition['properties'])):
             if 'name' not in self.modelDefinition['properties'][i]:
@@ -136,3 +137,33 @@ class Schema:
 
         self.deployedContract = self.web3.eth.contract(address=tx_receipt.contractAddress, abi=abi)
         self.isDeployed = True
+
+    def find(self):
+        if self.isDeployed == False:
+            raise Exception('Model is not deployed')
+        return self.deployedContract.functions.getAllRecords().call()
+    
+    def findById(self, id):
+        if self.isDeployed == False:
+            raise Exception('Model is not deployed')
+        idToLook = self.preprocessId(id)
+
+        return self.deployedContract.functions.getRecord(idToLook).call()
+    
+    def save(self, newValue):
+        if self.isDeployed == False:
+            raise Exception('Model is not deployed')
+        
+        if self.idField not in newValue:
+            raise Exception('Primary key field does not exist')
+        
+        print(str(list(newValue.keys())))
+        print(str(self.propertyNames))
+        if str(list(newValue.keys())) != str(self.propertyNames):
+            raise Exception('Instance does not match Schema definition')
+        
+        idToAdd = self.preprocessId(newValue[self.idField])
+
+        tx_hash = self.deployedContract.functions.addRecord(json.dumps(newValue),idToAdd).transact()
+        receipt = self.web3.eth.wait_for_transaction_receipt(tx_hash)
+        return receipt['status']

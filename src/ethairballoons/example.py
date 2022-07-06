@@ -21,3 +21,12 @@ mySchema = prov.createSchema(modelDefinition={
     ]
 })
 mySchema.deploy()
+
+rec = mySchema.save({
+    'model': 'A4',
+    'engine': 'V8',
+    'cylinders': '8'
+})
+print(rec)
+print(mySchema.find())
+print(mySchema.findById('A4'))

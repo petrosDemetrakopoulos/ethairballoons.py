@@ -8,7 +8,7 @@ It allows you to use Ethereum blockchain as a persistent storage in an organized
 
 <strong>Note:
 As transaction fees may be huge, it is strongly advised to only deploy EthAir Balloons models in private Ethereum blockchains or locally using
-`ganache-cli` .
+`ganache` .
 </strong>
 
 
@@ -26,11 +26,11 @@ pip install ethairballoons
 
 As you can see you can very easily create a new ethAirBaloons provider (line 3) by setting only 2 arguments.
 1) the URL of the Ethereum blockchain provider that you want to use
-(in the example it is set to a local `ganache-cli` provider),
+(in the example it is set to a local `ganache` provider),
 2) the path where you want to save the automatically generated smart contracts of your models.
 
 After you create the provider you can create new data schemas using the `createSchema()` function and pass the schema details in JS object format.
-Of course you can (an it is advised) keep the schema definitions in separate .JSON files and then import them using the `require()` statement in the top of your file.
+Of course you can (an it is advised) keep the schema definitions in separate .JSON files and then import them using the `import json` and then `json.load()` statements.
 
 
  `createSchema()` returns a  `Schema` object.
