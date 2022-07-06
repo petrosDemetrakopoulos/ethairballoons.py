@@ -175,3 +175,19 @@ class Schema:
         tx_hash = self.deployedContract.functions.deleteRecord(idToDelete).transact()
         receipt = self.web3.eth.wait_for_transaction_receipt(tx_hash)
         return receipt['status']
+
+    def updateById(self, id, newValue):
+        if self.isDeployed == False:
+            raise Exception('Model is not deployed')
+        
+        if self.idField not in newValue:
+            raise Exception('Primary key field does not exist')
+        
+        if str(list(newValue.keys())) != str(self.propertyNames):
+            raise Exception('Instance does not match Schema definition')
+        
+        idToUpdate = self.preprocessId(id)
+
+        tx_hash = self.deployedContract.functions.updateRecord(idToUpdate,json.dumps(newValue)).transact()
+        receipt = self.web3.eth.wait_for_transaction_receipt(tx_hash)
+        return receipt['status']
