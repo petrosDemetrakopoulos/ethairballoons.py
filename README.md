@@ -51,7 +51,7 @@ As you can see you can very easily create a new ethAirBaloons provider (line 3) 
 (in the example it is set to a local `ganache` provider),
 2) the path where you want to save the automatically generated smart contracts of your models.
 
-After you create the provider you can create new data schemas using the `createSchema()` function and pass the schema details in JS object format.
+After you create the provider you can create new data schemas using the `createSchema()` function and pass the schema details in dictionary format.
 Of course you can (an it is advised) keep the schema definitions in separate .JSON files and then import them using the `import json` and then `json.load()` statements.
 
 
