@@ -30,3 +30,6 @@ rec = mySchema.save({
 print(rec)
 print(mySchema.find())
 print(mySchema.findById('A4'))
+
+print(mySchema.deleteById('A4'))
+print(mySchema.find())

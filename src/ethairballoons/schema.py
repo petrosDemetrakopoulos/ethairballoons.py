@@ -157,13 +157,21 @@ class Schema:
         if self.idField not in newValue:
             raise Exception('Primary key field does not exist')
         
-        print(str(list(newValue.keys())))
-        print(str(self.propertyNames))
         if str(list(newValue.keys())) != str(self.propertyNames):
             raise Exception('Instance does not match Schema definition')
         
         idToAdd = self.preprocessId(newValue[self.idField])
 
         tx_hash = self.deployedContract.functions.addRecord(json.dumps(newValue),idToAdd).transact()
+        receipt = self.web3.eth.wait_for_transaction_receipt(tx_hash)
+        return receipt['status']
+
+    def deleteById(self, id):
+        if self.isDeployed == False:
+            raise Exception('Model is not deployed')
+        
+        idToDelete = self.preprocessId(id)
+
+        tx_hash = self.deployedContract.functions.deleteRecord(idToDelete).transact()
         receipt = self.web3.eth.wait_for_transaction_receipt(tx_hash)
         return receipt['status']
