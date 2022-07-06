@@ -1,0 +1,9 @@
+Metadata-Version: 2.1
+Name: ethairballoons
+Version: 1.0.0
+Home-page: https://github.com/petrosDemetrakopoulos/ethairballoons.py
+Author: Petros Demetrakopoulos
+Author-email: petrosdem@gamil.com
+License: MIT
+Keywords: blockchain ethereum web3 orm data
+License-File: LICENSE
