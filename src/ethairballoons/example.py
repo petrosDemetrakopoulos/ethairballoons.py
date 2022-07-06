@@ -29,11 +29,10 @@ rec = mySchema.save({
 })
 print(rec)
 print(mySchema.find())
-print(mySchema.findById('A4'))
+print(mySchema.findById('A567'))
 print(mySchema.updateById('A4', {'model': 'A4',
                                  'engine': 'V18',
                                  'cylinders': '18'}))
-
 print(mySchema.find())
 print(mySchema.deleteById('A4'))
 print(mySchema.find())

@@ -20,8 +20,30 @@ pip install ethairballoons
 # Setup
 
 ```python
+from ethairballoons import ethairBalloons
 
+# frist parameter is the IP of the Ethereum network we want to store data
+# seconda parameter is the path to save to smart contract
+provider = ethairBalloons('127.0.0.1', '../')
 
+mySchema = provider.createSchema(modelDefinition={
+    'name': "Car",
+    'contractName': "carsContract",
+    'properties': [{
+            'name': "model",
+            'type': "bytes32",
+            'primaryKey': True
+    },
+        {
+            'name': "engine",
+            'type': "bytes32",
+    },
+        {
+            'name': "cylinders",
+            'type': "uint"
+    }
+    ]
+})
 ```
 
 As you can see you can very easily create a new ethAirBaloons provider (line 3) by setting only 2 arguments.
@@ -35,7 +57,7 @@ Of course you can (an it is advised) keep the schema definitions in separate .JS
 
  `createSchema()` returns a  `Schema` object.
  In order to successfully initialize a `Schema` object, *only one* property
- of the schema definition must have `primaryKey` field set to `true` (as shown in the example above)
+ of the schema definition must have `primaryKey` field set to `True` (as shown in the example above)
  and the `type` field must be set to one of the legal [Solidity data types](https://solidity.readthedocs.io/en/v0.5.3/types.html).
 
  # Functions of `Schema` object
@@ -54,7 +76,7 @@ After deploy completes you can call the other functions.
 Example:
 
 ```python
-
+mySchema.deploy()
 ```
 
 save()
@@ -64,7 +86,11 @@ It returns the saved object and an error object that will be undefined if the ob
 
 Example:
  ```python
-
+save_receipt = mySchema.save({
+    'model': 'A4',
+    'engine': 'V8',
+    'cylinders': '8'
+})
 ```
 
 find()
@@ -72,7 +98,7 @@ find()
 Returns all the records of our Schema.
 Example:
  ```python
-
+all_records = mySchema.find()
 ```
 
 findById()
@@ -82,25 +108,25 @@ Otherwise it will return an error object mentioning that 'record with this id do
 
 Example:
  ```python
-
+record_by_id = mySchema.findById('A4')
 ```
 
 
 deleteById()
 ------------
-Deletes the record with a specific primary key value if exists.
-Otherwise it will return an error object mentioning that 'record with this id does not exist'.
+Deletes the record with a specific primary key value if exists. It returns `True` if the operation completed successfully.
+Otherwise it will return `False`.
 
 Example:
  ```python
-
+delete_receipt = mySchema.deleteById('A4')
 ```
 
 updateById()
 ------------
 Updates the record with a specific primary key value if exists.
 Otherwise it will return an error object mentioning that 'record with this id does not exist'.
-It returns the updated record.
+It returns the True or False that indicates if the operation completed successfullt or not.
 
 The first parameter is the primary key value of the record we want to update.
 The second parameter is the updated object.
@@ -109,7 +135,9 @@ If you want to reassign a stored record to a different id you must first delete 
 
 Example:
  ```python
-
+update_receipt = mySchema.updateById('A4', {'model': 'A4',
+                                 'engine': 'V18',
+                                 'cylinders': '18'})
 ```
 
 setAccount(account)
@@ -117,11 +145,11 @@ setAccount(account)
 With this function you can explicitly set the ETH account that you want to use for the model.
 If not set, account is set by default to the first account of the provider.
 
-# Example project
-You can find a detailed and documented example project that implement a REST API for CRUD operations in the ethereum blockchain through EthairBalloon models in [this Github repo](https://github.com/petrosDemetrakopoulos/ethairballoons-CRUD-API)
+# JavaScript version
+EthairBalloons is also available for JavaScript in [this GitHub repository](https://github.com/petrosDemetrakopoulos/ethairballoons).
 
-# Tests
-You can run tests by typing `npm test` in the root directory of the library.
+You can also install it via `npm install ethairballoons`
+
 
 # License
 EthAir Balloons are licensed under MIT license.
