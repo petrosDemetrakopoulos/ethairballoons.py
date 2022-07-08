@@ -195,9 +195,9 @@ class Schema:
         return receipt['status']
 
 class ethairBalloons:
-    def __init__(self, ipAddress, contractSavePath):
+    def __init__(self, ipAddress, contractSavePath, port='8545'):
         self.contractSavePath = contractSavePath
-        self.web3Provider = Web3(Web3.WebsocketProvider('ws://' + ipAddress + ':8545', websocket_timeout=60))
+        self.web3Provider = Web3(Web3.WebsocketProvider('ws://' + ipAddress + ':' + port, websocket_timeout=60))
 
     def createSchema(self, modelDefinition):
         return Schema(modelDefinition, self.contractSavePath, self.web3Provider)
