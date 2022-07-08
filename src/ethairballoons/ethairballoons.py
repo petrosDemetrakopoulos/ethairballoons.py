@@ -99,7 +99,8 @@ class Schema:
 
     def generateContract(self, contractSavePath):
         self.validate()
-        file = open(os.path.dirname(__file__) + '/contractTemplate.txt', 'r')
+        _ROOT = os.path.abspath(os.path.dirname(__file__))
+        file = open(os.path.join(_ROOT, 'contractTemplate.txt'), 'r')
         templateFile = file.read()
         compiler = Compiler()
         handleBarsTemplate = compiler.compile(source=templateFile)
@@ -192,6 +193,7 @@ class Schema:
         tx_hash = self.deployedContract.functions.updateRecord(idToUpdate,json.dumps(newValue)).transact()
         receipt = self.web3.eth.wait_for_transaction_receipt(tx_hash)
         return receipt['status']
+
 class ethairBalloons:
     def __init__(self, ipAddress, contractSavePath):
         self.contractSavePath = contractSavePath
